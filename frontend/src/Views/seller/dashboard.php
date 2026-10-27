@@ -79,55 +79,67 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-stone-100 text-stone-700">
-                        <?php foreach ($products as $p): ?>
+                        <?php foreach ($products as $p): 
+                            $pId = is_array($p) ? $p['id'] : $p->id;
+                            $pName = is_array($p) ? $p['name'] : $p->name;
+                            $pSlug = is_array($p) ? $p['slug'] : $p->slug;
+                            $pBasePrice = is_array($p) ? $p['base_price'] : $p->basePrice;
+                            $pCatName = is_array($p) ? ($p['category_name'] ?? 'General') : ($p->categoryName ?? 'General');
+                            $pImg = is_array($p) ? ($p['primary_image'] ?? '') : $p->getPrimaryImage();
+                            $pStock = is_array($p) ? ($p['total_stock'] ?? 0) : $p->getTotalStock();
+                            $pStatus = is_array($p) ? ($p['status'] ?? 'ACTIVE') : $p->status;
+                            $pVariants = is_array($p) ? ($p['variants'] ?? []) : $p->variants;
+                        ?>
                             <tr class="hover:bg-stone-50/60 transition-colors">
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
-                                        <img src="<?= htmlspecialchars($p->getPrimaryImage()) ?>" alt="" 
+                                        <img src="<?= htmlspecialchars($pImg) ?>" alt="<?= htmlspecialchars($pName) ?>" 
                                              class="w-12 h-14 object-cover rounded-lg border bg-stone-100 flex-shrink-0">
                                         <div>
-                                            <strong class="text-stone-900 font-bold block text-sm"><?= htmlspecialchars($p->name) ?></strong>
-                                            <span class="text-[11px] text-stone-400 font-mono"><?= htmlspecialchars($p->slug) ?></span>
+                                            <strong class="text-stone-900 font-bold block text-sm"><?= htmlspecialchars($pName) ?></strong>
+                                            <span class="text-[11px] text-stone-400 font-mono"><?= htmlspecialchars($pSlug) ?></span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="py-4 px-4 font-medium text-stone-800">
-                                    <?= htmlspecialchars($p->categoryName ?? 'General') ?>
+                                    <?= htmlspecialchars($pCatName) ?>
                                 </td>
                                 <td class="py-4 px-4 font-bold text-stone-900">
-                                    $<?= number_format($p->basePrice, 2) ?>
+                                    $<?= number_format((float)$pBasePrice, 2) ?>
                                 </td>
                                 <td class="py-4 px-4">
                                     <div class="flex flex-wrap gap-1 max-w-xs">
-                                        <?php foreach ($p->variants as $v): ?>
+                                        <?php foreach ($pVariants as $v): 
+                                            $vSize = is_array($v) ? $v['size'] : $v->size;
+                                            $vStock = is_array($v) ? $v['stock'] : $v->stock;
+                                        ?>
                                             <span class="px-1.5 py-0.5 rounded text-[10px] bg-stone-100 text-stone-700 font-medium">
-                                                <?= htmlspecialchars($v->size) ?>: <?= $v->stock ?>
+                                                <?= htmlspecialchars($vSize) ?>: <?= $vStock ?>
                                             </span>
                                         <?php endforeach; ?>
                                     </div>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <?php $stock = $p->getTotalStock(); ?>
-                                    <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold <?= $stock <= 10 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' ?>">
-                                        <?= $stock ?> piezas
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold <?= $pStock <= 10 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' ?>">
+                                        <?= $pStock ?> piezas
                                     </span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold <?= $p->status === 'ACTIVE' ? 'bg-blue-100 text-blue-800' : 'bg-stone-200 text-stone-600' ?>">
-                                        <?= htmlspecialchars($p->status) ?>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold <?= $pStatus === 'ACTIVE' ? 'bg-blue-100 text-blue-800' : 'bg-stone-200 text-stone-600' ?>">
+                                        <?= htmlspecialchars($pStatus) ?>
                                     </span>
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="/seller/product/edit/<?= htmlspecialchars($p->id) ?>" 
+                                        <a href="/seller/product/edit/<?= htmlspecialchars($pId) ?>" 
                                            class="p-2 text-stone-600 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors" title="Editar">
                                             <i class="fa-regular fa-pen-to-square"></i>
                                         </a>
-                                        <a href="/product/<?= htmlspecialchars($p->slug) ?>" target="_blank"
+                                        <a href="/product/<?= htmlspecialchars($pSlug) ?>" target="_blank"
                                            class="p-2 text-stone-600 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors" title="Ver en Tienda">
                                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                         </a>
-                                        <form action="/seller/product/delete/<?= htmlspecialchars($p->id) ?>" method="POST" onsubmit="return confirm('¿Confirmas que deseas eliminar esta prenda del catálogo?')">
+                                        <form action="/seller/product/delete/<?= htmlspecialchars($pId) ?>" method="POST" onsubmit="return confirm('¿Confirmas que deseas eliminar esta prenda del catálogo?')">
                                             <button type="submit" class="p-2 text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors" title="Eliminar">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </button>

@@ -20,24 +20,29 @@
             </div>
 
             <div class="divide-y divide-stone-100">
-                <?php foreach ($categories as $cat): ?>
+                <?php foreach ($categories as $cat): 
+                    $catImg = is_array($cat) ? ($cat['image_url'] ?? '') : $cat->imageUrl;
+                    $catName = is_array($cat) ? $cat['name'] : $cat->name;
+                    $catSlug = is_array($cat) ? $cat['slug'] : $cat->slug;
+                    $catDesc = is_array($cat) ? ($cat['description'] ?? '') : $cat->description;
+                ?>
                     <div class="p-4 flex items-center justify-between hover:bg-stone-50/50 text-xs">
                         <div class="flex items-center gap-4">
-                            <?php if ($cat->imageUrl): ?>
-                                <img src="<?= htmlspecialchars($cat->imageUrl) ?>" alt="" class="w-12 h-12 object-cover rounded-xl border bg-stone-100">
+                            <?php if (!empty($catImg)): ?>
+                                <img src="<?= htmlspecialchars($catImg) ?>" alt="" class="w-12 h-12 object-cover rounded-xl border bg-stone-100">
                             <?php else: ?>
                                 <div class="w-12 h-12 rounded-xl bg-stone-100 flex items-center justify-center text-stone-400">
                                     <i class="fa-solid fa-tag"></i>
                                 </div>
                             <?php endif; ?>
                             <div>
-                                <strong class="font-bold text-stone-900 text-sm block"><?= htmlspecialchars($cat->name) ?></strong>
-                                <span class="text-stone-400 font-mono text-[11px] block">/catalog?category=<?= htmlspecialchars($cat->slug) ?></span>
-                                <p class="text-stone-500 text-[11px] mt-0.5"><?= htmlspecialchars($cat->description ?? '') ?></p>
+                                <strong class="font-bold text-stone-900 text-sm block"><?= htmlspecialchars($catName) ?></strong>
+                                <span class="text-stone-400 font-mono text-[11px] block">/catalog?category=<?= htmlspecialchars($catSlug) ?></span>
+                                <p class="text-stone-500 text-[11px] mt-0.5"><?= htmlspecialchars($catDesc) ?></p>
                             </div>
                         </div>
 
-                        <a href="/catalog?category=<?= htmlspecialchars($cat->slug) ?>" target="_blank" 
+                        <a href="/catalog?category=<?= htmlspecialchars($catSlug) ?>" target="_blank" 
                            class="text-xs font-semibold text-stone-700 hover:text-stone-900 flex items-center gap-1">
                             <span>Ver</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                         </a>

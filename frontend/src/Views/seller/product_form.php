@@ -28,8 +28,11 @@
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1.5">Categoría *</label>
                     <select name="category_id" required class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:border-stone-900">
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= $cat->id ?>"><?= htmlspecialchars($cat->name) ?></option>
+                        <?php foreach ($categories as $cat): 
+                            $catId = is_array($cat) ? $cat['id'] : $cat->id;
+                            $catName = is_array($cat) ? $cat['name'] : $cat->name;
+                        ?>
+                            <option value="<?= $catId ?>"><?= htmlspecialchars($catName) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

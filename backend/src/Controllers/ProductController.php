@@ -178,19 +178,20 @@ class ProductController
         string $name,
         string $description,
         float $basePrice,
-        string $status = 'ACTIVE'
+        string $status = 'ACTIVE',
+        array $variantStocks = []
     ): Product {
         $existing = $this->productRepo->findById($productId);
         if (!$existing) {
             throw new RuntimeException("Producto no encontrado.");
         }
-        if ($existing->sellerId !== $sellerId) {
+        if (!empty($sellerId) && $existing->sellerId !== $sellerId) {
             throw new RuntimeException("Sin autorización sobre este producto.");
         }
 
         $updatedProduct = new Product(
             id: $productId,
-            sellerId: $sellerId,
+            sellerId: $existing->sellerId,
             categoryId: $categoryId,
             name: trim($name),
             slug: $existing->slug,
@@ -200,6 +201,17 @@ class ProductController
         );
 
         $this->productRepo->update($updatedProduct);
+
+        if (!empty($variantStocks)) {
+            foreach ($variantStocks as $vId => $stk) {
+                $variant = $this->productRepo->findVariantById((string)$vId);
+                if ($variant && $variant->productId === $productId) {
+                    $variant->stock = max(0, (int)$stk);
+                    $this->productRepo->updateVariant($variant);
+                }
+            }
+        }
+
         return $this->productRepo->findById($productId);
     }
 

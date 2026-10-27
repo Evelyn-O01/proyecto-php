@@ -50,6 +50,7 @@ $routes = [
         '#^/logout$#' => [AuthController::class, 'logout'],
         '#^/seller$#' => [SellerController::class, 'dashboard'],
         '#^/seller/product/new$#' => [SellerController::class, 'create'],
+        '#^/seller/product/edit/(?P<id>[^/]+)$#' => [SellerController::class, 'edit'],
         '#^/seller/sales$#' => [SellerController::class, 'sales'],
         '#^/admin$#' => [AdminController::class, 'dashboard'],
         '#^/admin/users$#' => [AdminController::class, 'users'],
@@ -65,6 +66,8 @@ $routes = [
         '#^/login$#' => [AuthController::class, 'login'],
         '#^/register$#' => [AuthController::class, 'register'],
         '#^/seller/product/new$#' => [SellerController::class, 'store'],
+        '#^/seller/product/edit/(?P<id>[^/]+)$#' => [SellerController::class, 'update'],
+        '#^/seller/product/delete/(?P<id>[^/]+)$#' => [SellerController::class, 'delete'],
         '#^/admin/user/role$#' => [AdminController::class, 'updateRole'],
         '#^/admin/category/new$#' => [AdminController::class, 'createCategory'],
     ]

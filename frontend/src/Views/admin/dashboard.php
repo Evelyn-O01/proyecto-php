@@ -102,33 +102,39 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-stone-100 text-stone-700">
-                    <?php foreach ($recentOrders as $o): ?>
+                    <?php foreach ($recentOrders as $o): 
+                        $oNumber = is_array($o) ? ($o['order_number'] ?? '') : $o->orderNumber;
+                        $oDate = is_array($o) ? ($o['created_at'] ?? '') : $o->createdAt;
+                        $oCustName = is_array($o) ? ($o['customer_name'] ?? '') : $o->customerName;
+                        $oCustEmail = is_array($o) ? ($o['customer_email'] ?? '') : $o->customerEmail;
+                        $oBadge = is_array($o) ? ($o['status_badge'] ?? 'bg-emerald-100 text-emerald-800') : (isset($o->status) ? $o->status->badgeClass() : 'bg-emerald-100 text-emerald-800');
+                        $oLabel = is_array($o) ? ($o['status_label'] ?? 'Completado') : (isset($o->status) ? $o->status->label() : 'Completado');
+                        $oGateway = is_array($o) ? ($o['payment']['gateway'] ?? 'Stripe / Tarjeta') : ($o->payment->gateway ?? 'Stripe / Tarjeta');
+                        $oLast4 = is_array($o) ? ($o['payment']['card_last4'] ?? '4242') : ($o->payment->cardLast4 ?? '4242');
+                        $oTotal = is_array($o) ? ($o['total_amount'] ?? 0) : $o->totalAmount;
+                    ?>
                         <tr class="hover:bg-stone-50/60 transition-colors">
                             <td class="py-4 px-6 font-mono font-bold text-stone-900">
-                                <?= htmlspecialchars($o->orderNumber) ?>
+                                <?= htmlspecialchars($oNumber) ?>
                             </td>
                             <td class="py-4 px-4 text-stone-500">
-                                <?= date('d/m/Y H:i', strtotime($o->createdAt)) ?>
+                                <?= !empty($oDate) ? date('d/m/Y H:i', strtotime($oDate)) : '-' ?>
                             </td>
                             <td class="py-4 px-4">
-                                <strong class="text-stone-900 block"><?= htmlspecialchars($o->customerName) ?></strong>
-                                <span class="text-[11px] text-stone-400"><?= htmlspecialchars($o->customerEmail) ?></span>
+                                <strong class="text-stone-900 block"><?= htmlspecialchars($oCustName) ?></strong>
+                                <span class="text-[11px] text-stone-400"><?= htmlspecialchars($oCustEmail) ?></span>
                             </td>
                             <td class="py-4 px-4">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold <?= $o->status->badgeClass() ?>">
-                                    <?= $o->status->label() ?>
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold <?= $oBadge ?>">
+                                    <?= htmlspecialchars($oLabel) ?>
                                 </span>
                             </td>
                             <td class="py-4 px-4">
-                                <?php if ($o->payment): ?>
-                                    <span class="font-medium text-stone-800"><?= htmlspecialchars($o->payment->gateway) ?></span>
-                                    <span class="text-stone-400 block text-[10px]">•••• <?= htmlspecialchars($o->payment->cardLast4 ?: '4242') ?></span>
-                                <?php else: ?>
-                                    <span class="text-stone-400">-</span>
-                                <?php endif; ?>
+                                <span class="font-medium text-stone-800"><?= htmlspecialchars($oGateway) ?></span>
+                                <span class="text-stone-400 block text-[10px]">•••• <?= htmlspecialchars($oLast4) ?></span>
                             </td>
                             <td class="py-4 px-6 text-right font-serif text-sm font-bold text-stone-900">
-                                $<?= number_format($o->totalAmount, 2) ?>
+                                $<?= number_format((float)$oTotal, 2) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

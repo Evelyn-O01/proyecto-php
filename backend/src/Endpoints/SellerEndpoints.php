@@ -60,6 +60,7 @@ class SellerEndpoints
         $description = $body['description'] ?? '';
         $basePrice = (float)($body['base_price'] ?? 0);
         $status = $body['status'] ?? 'ACTIVE';
+        $variantStocks = $body['variant_stock'] ?? [];
 
         try {
             $product = $this->productCtrl->updateProduct(
@@ -69,7 +70,8 @@ class SellerEndpoints
                 $name,
                 $description,
                 $basePrice,
-                $status
+                $status,
+                $variantStocks
             );
             ApiRouter::json(['success' => true, 'data' => ['id' => $product->id]]);
         } catch (\Throwable $e) {

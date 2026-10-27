@@ -34,9 +34,13 @@ class SellerController
         $totalUnits = 0;
         $totalValuation = 0.0;
         foreach ($products as $p) {
-            foreach ($p['variants'] as $v) {
-                $totalUnits += $v['stock'];
-                $totalValuation += $v['stock'] * ($p['base_price'] + $v['additional_price']);
+            $variants = is_array($p) ? ($p['variants'] ?? []) : $p->variants;
+            $basePrice = is_array($p) ? (float)($p['base_price'] ?? 0) : (float)$p->basePrice;
+            foreach ($variants as $v) {
+                $stock = is_array($v) ? (int)($v['stock'] ?? 0) : (int)$v->stock;
+                $extraPrice = is_array($v) ? (float)($v['additional_price'] ?? 0) : (float)$v->additionalPrice;
+                $totalUnits += $stock;
+                $totalValuation += $stock * ($basePrice + $extraPrice);
             }
         }
 
@@ -51,6 +55,94 @@ class SellerController
         ];
 
         echo StoreController::render('seller/dashboard', $data, 'admin');
+    }
+
+    public function edit(array $params): void
+    {
+        $user = Session::getUser();
+        if (!$user || !Session::hasRole('SELLER', 'ADMIN')) {
+            Session::flash('error', 'Acceso exclusivo para vendedores.');
+            header('Location: /login');
+            exit;
+        }
+
+        $id = $params['id'] ?? '';
+        try {
+            $product = $this->client->get('/api/v1/products/' . $id);
+            $categories = $this->client->get('/api/v1/categories');
+        } catch (\Throwable $e) {
+            Session::flash('error', 'Prenda no encontrada: ' . $e->getMessage());
+            header('Location: /seller');
+            exit;
+        }
+
+        $data = [
+            'title' => 'Editar Prenda | AURA Atelier',
+            'user' => $user,
+            'product' => $product,
+            'categories' => $categories
+        ];
+
+        echo StoreController::render('seller/product_edit', $data, 'admin');
+    }
+
+    public function update(array $params): void
+    {
+        $user = Session::getUser();
+        if (!$user || !Session::hasRole('SELLER', 'ADMIN')) {
+            header('Location: /login');
+            exit;
+        }
+
+        $id = $params['id'] ?? '';
+        $name = trim($_POST['name'] ?? '');
+        $categoryId = (int)($_POST['category_id'] ?? 1);
+        $description = trim($_POST['description'] ?? '');
+        $basePrice = (float)($_POST['base_price'] ?? 0);
+        $status = $_POST['status'] ?? 'ACTIVE';
+        $variantStocks = $_POST['variant_stock'] ?? [];
+
+        try {
+            $this->client->post('/api/v1/seller/products/' . $id, [
+                'seller_id' => $user['id'],
+                'category_id' => $categoryId,
+                'name' => $name,
+                'description' => $description,
+                'base_price' => $basePrice,
+                'status' => $status,
+                'variant_stock' => $variantStocks
+            ]);
+
+            Session::flash('success', 'Prenda actualizada correctamente.');
+            header('Location: /seller');
+            exit;
+        } catch (\Throwable $e) {
+            Session::flash('error', $e->getMessage());
+            header('Location: /seller/product/edit/' . $id);
+            exit;
+        }
+    }
+
+    public function delete(array $params): void
+    {
+        $user = Session::getUser();
+        if (!$user || !Session::hasRole('SELLER', 'ADMIN')) {
+            header('Location: /login');
+            exit;
+        }
+
+        $id = $params['id'] ?? '';
+        try {
+            $this->client->post('/api/v1/seller/products/delete/' . $id, [
+                'seller_id' => $user['id']
+            ]);
+            Session::flash('success', 'Prenda eliminada del catálogo.');
+        } catch (\Throwable $e) {
+            Session::flash('error', $e->getMessage());
+        }
+
+        header('Location: /seller');
+        exit;
     }
 
     public function create(): void

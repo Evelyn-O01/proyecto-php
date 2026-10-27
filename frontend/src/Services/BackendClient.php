@@ -150,6 +150,27 @@ class BackendClient
             return $ctrl->getBySeller($m[1]);
         }
 
+        if (preg_match('#^/api/v1/seller/products/delete/([^/]+)$#', $path, $m)) {
+            $ctrl = new \App\Backend\Controllers\ProductController();
+            $ok = $ctrl->deleteProduct($m[1], $data['seller_id'] ?? '');
+            return ['success' => $ok];
+        }
+
+        if (preg_match('#^/api/v1/seller/products/([^/]+)$#', $path, $m)) {
+            $ctrl = new \App\Backend\Controllers\ProductController();
+            $prod = $ctrl->updateProduct(
+                $m[1],
+                $data['seller_id'] ?? '',
+                (int)($data['category_id'] ?? 1),
+                $data['name'] ?? '',
+                $data['description'] ?? '',
+                (float)($data['base_price'] ?? 0),
+                $data['status'] ?? 'ACTIVE',
+                $data['variant_stock'] ?? []
+            );
+            return ['id' => $prod->id];
+        }
+
         if ($path === '/api/v1/seller/products') {
             $ctrl = new \App\Backend\Controllers\ProductController();
             $prod = $ctrl->createProduct(
@@ -174,6 +195,27 @@ class BackendClient
             $ctrl = new \App\Backend\Controllers\AdminController();
             $ok = $ctrl->updateUserRole($data['user_id'] ?? '', $data['role'] ?? 'CLIENT');
             return ['success' => $ok];
+        }
+
+        if ($path === '/api/v1/admin/categories') {
+            $ctrl = new \App\Backend\Controllers\AdminController();
+            return $ctrl->createCategory($data['name'] ?? '', $data['description'] ?? '', $data['image_url'] ?? null);
+        }
+
+        // 6. Reports Data
+        if ($path === '/api/v1/reports/sales/data') {
+            $ctrl = new \App\Backend\Controllers\ReportController();
+            return $ctrl->getSalesReport($query['start_date'] ?? null, $query['end_date'] ?? null, !empty($query['category_id']) ? (int)$query['category_id'] : null);
+        }
+
+        if ($path === '/api/v1/reports/inventory/data') {
+            $ctrl = new \App\Backend\Controllers\ReportController();
+            return $ctrl->getInventoryReport(!empty($query['category_id']) ? (int)$query['category_id'] : null, (int)($query['threshold'] ?? 10));
+        }
+
+        if ($path === '/api/v1/reports/sellers/data') {
+            $ctrl = new \App\Backend\Controllers\ReportController();
+            return $ctrl->getSellerReport($query['start_date'] ?? null, $query['end_date'] ?? null);
         }
 
         throw new RuntimeException("Endpoint '{$path}' no implementado en bridge.");

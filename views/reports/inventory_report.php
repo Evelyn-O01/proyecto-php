@@ -47,6 +47,10 @@
         </form>
 
         <div class="flex items-center gap-2">
+            <a href="/admin/reports/inventory?threshold=<?= $low_stock_threshold ?>&export=csv" 
+               class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold rounded-xl text-xs flex items-center gap-2 transition-colors">
+                <i class="fa-solid fa-file-csv text-emerald-700"></i> Descargar CSV
+            </a>
             <button onclick="window.print()" class="px-4 py-2.5 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-xs transition-colors">
                 <i class="fa-solid fa-print"></i> Imprimir Reporte
             </button>

@@ -120,6 +120,10 @@
                                     </a>
                                 <?php endif; ?>
 
+                                <a href="/orders" class="flex items-center gap-2.5 px-4 py-2 text-xs text-stone-700 hover:bg-stone-50 font-medium">
+                                    <i class="fa-solid fa-box-archive text-stone-500 w-4"></i> Mis Pedidos
+                                </a>
+
                                 <?php if ($_SESSION['user']['role'] === 'SELLER' || $_SESSION['user']['role'] === 'ADMIN'): ?>
                                     <a href="/seller" class="flex items-center gap-2.5 px-4 py-2 text-xs text-stone-700 hover:bg-stone-50 font-medium">
                                         <i class="fa-solid fa-shirt text-stone-500 w-4"></i> Panel de Vendedor

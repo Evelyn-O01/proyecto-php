@@ -124,4 +124,24 @@ class CheckoutController
 
         echo Router::renderView('store/order_success', $data, 'main');
     }
+
+    public function myOrders(): void
+    {
+        $user = SessionManager::getUser();
+        if (!$user) {
+            SessionManager::setFlash('info', 'Inicia sesión para consultar tus pedidos.');
+            header('Location: /login');
+            exit;
+        }
+
+        $orders = $this->orderRepo->findByCustomerId($user['id']);
+
+        $data = [
+            'title' => 'Mis Pedidos & Seguimiento | AURA Atelier',
+            'user' => $user,
+            'orders' => $orders
+        ];
+
+        echo Router::renderView('store/orders', $data, 'main');
+    }
 }

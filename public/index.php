@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+// Servir archivos estáticos directamente si se usa el servidor integrado de PHP
+if (php_sapi_name() === 'cli-server') {
+    $path = __DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    if (is_file($path)) {
+        return false;
+    }
+}
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Presentation\Controllers\AdminController;
@@ -41,6 +49,7 @@ $router->get('/cart/remove/{id}', [CartController::class, 'remove']);
 $router->get('/checkout', [CheckoutController::class, 'index']);
 $router->post('/checkout/process', [CheckoutController::class, 'process']);
 $router->get('/order/success/{number}', [CheckoutController::class, 'success']);
+$router->get('/orders', [CheckoutController::class, 'myOrders']);
 
 // Autenticación & RBAC
 $router->get('/login', [AuthController::class, 'showLogin']);

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Infrastructure\Database\PostgresConnection;
 use App\Infrastructure\Repositories\PostgresCategoryRepository;
@@ -97,5 +97,9 @@ echo "[6/6] Reportes generados correctamente:" . PHP_EOL;
 echo "      - Reporte de Ventas: Total $" . number_format($salesReport['summary']['total_sales'], 2) . " MXN en " . $salesReport['summary']['total_orders'] . " órdenes." . PHP_EOL;
 echo "      - Reporte de Inventario: " . $inventoryReport['summary']['total_units'] . " unidades valorizadas en $" . number_format($inventoryReport['summary']['total_inventory_value'], 2) . " MXN." . PHP_EOL;
 echo "      - Alertas de Stock Bajo detectadas: " . count($inventoryReport['low_stock_items']) . " ítems." . PHP_EOL;
+
+// 6. Validar Historial de Pedidos del Cliente
+$customerOrders = $orderRepo->findByCustomerId('30000000-0000-0000-0000-000000000001');
+echo "[7/7] Historial de Pedidos del Cliente: " . count($customerOrders) . " órdenes recuperadas con éxito." . PHP_EOL;
 
 echo "=== TODAS LAS PRUEBAS PASARON EXITOSAMENTE ===" . PHP_EOL;

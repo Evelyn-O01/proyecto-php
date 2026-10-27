@@ -1,0 +1,14 @@
+{
+    "name": "tienda/ropa-online",
+    "description": "Tienda de ropa en línea con arquitectura hexagonal, PHP y PostgreSQL",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.1"
+    }
+}

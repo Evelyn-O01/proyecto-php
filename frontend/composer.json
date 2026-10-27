@@ -1,0 +1,14 @@
+{
+    "name": "tienda/frontend",
+    "description": "Frontend Web App para Tienda de Ropa en PHP",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\Frontend\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.1"
+    }
+}

@@ -192,10 +192,9 @@ class Session
 
             $existing = $registry[$userId] ?? null;
             if (is_array($existing) && ($existing['token'] ?? '') !== $token) {
-                $minutes = max(1, (int)ceil($ttl / 60));
                 throw new RuntimeException(
                     "Esta cuenta ya tiene una sesión activa en otro navegador. " .
-                    "Cierra sesión allí o espera {$minutes} minutos."
+                    "Cierra sesión allí para poder ingresar aquí."
                 );
             }
 

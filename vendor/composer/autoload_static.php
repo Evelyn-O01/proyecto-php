@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitadde00a29e159400d99781c8c403dba7
 {
     public static $prefixLengthsPsr4 = array (
-        'A' =>
+        'A' => 
         array (
             'App\\Frontend\\' => 13,
             'App\\Backend\\' => 12,
@@ -15,17 +15,68 @@ class ComposerStaticInitadde00a29e159400d99781c8c403dba7
     );
 
     public static $prefixDirsPsr4 = array (
-        'App\\Frontend\\' =>
+        'App\\Frontend\\' => 
         array (
             0 => __DIR__ . '/../..' . '/frontend/src',
         ),
-        'App\\Backend\\' =>
+        'App\\Backend\\' => 
         array (
             0 => __DIR__ . '/../..' . '/backend/src',
         ),
     );
 
     public static $classMap = array (
+        'App\\Backend\\Controllers\\AdminController' => __DIR__ . '/../..' . '/backend/src/Controllers/AdminController.php',
+        'App\\Backend\\Controllers\\AuthController' => __DIR__ . '/../..' . '/backend/src/Controllers/AuthController.php',
+        'App\\Backend\\Controllers\\OrderController' => __DIR__ . '/../..' . '/backend/src/Controllers/OrderController.php',
+        'App\\Backend\\Controllers\\ProductController' => __DIR__ . '/../..' . '/backend/src/Controllers/ProductController.php',
+        'App\\Backend\\Controllers\\ReportController' => __DIR__ . '/../..' . '/backend/src/Controllers/ReportController.php',
+        'App\\Backend\\Domain\\Entities\\Category' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/Category.php',
+        'App\\Backend\\Domain\\Entities\\Order' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/Order.php',
+        'App\\Backend\\Domain\\Entities\\OrderItem' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/OrderItem.php',
+        'App\\Backend\\Domain\\Entities\\Payment' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/Payment.php',
+        'App\\Backend\\Domain\\Entities\\Product' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/Product.php',
+        'App\\Backend\\Domain\\Entities\\ProductImage' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/ProductImage.php',
+        'App\\Backend\\Domain\\Entities\\ProductVariant' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/ProductVariant.php',
+        'App\\Backend\\Domain\\Entities\\User' => __DIR__ . '/../..' . '/backend/src/Domain/Entities/User.php',
+        'App\\Backend\\Domain\\Exceptions\\DomainException' => __DIR__ . '/../..' . '/backend/src/Domain/Exceptions/DomainException.php',
+        'App\\Backend\\Domain\\Ports\\CategoryRepositoryPort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/CategoryRepositoryPort.php',
+        'App\\Backend\\Domain\\Ports\\FileStoragePort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/FileStoragePort.php',
+        'App\\Backend\\Domain\\Ports\\OrderRepositoryPort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/OrderRepositoryPort.php',
+        'App\\Backend\\Domain\\Ports\\PaymentGatewayPort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/PaymentGatewayPort.php',
+        'App\\Backend\\Domain\\Ports\\ProductRepositoryPort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/ProductRepositoryPort.php',
+        'App\\Backend\\Domain\\Ports\\ReportRepositoryPort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/ReportRepositoryPort.php',
+        'App\\Backend\\Domain\\Ports\\UserRepositoryPort' => __DIR__ . '/../..' . '/backend/src/Domain/Ports/UserRepositoryPort.php',
+        'App\\Backend\\Domain\\ValueObjects\\OrderStatus' => __DIR__ . '/../..' . '/backend/src/Domain/ValueObjects/OrderStatus.php',
+        'App\\Backend\\Domain\\ValueObjects\\Role' => __DIR__ . '/../..' . '/backend/src/Domain/ValueObjects/Role.php',
+        'App\\Backend\\Endpoints\\AdminEndpoints' => __DIR__ . '/../..' . '/backend/src/Endpoints/AdminEndpoints.php',
+        'App\\Backend\\Endpoints\\ApiRouter' => __DIR__ . '/../..' . '/backend/src/Endpoints/ApiRouter.php',
+        'App\\Backend\\Endpoints\\AuthEndpoints' => __DIR__ . '/../..' . '/backend/src/Endpoints/AuthEndpoints.php',
+        'App\\Backend\\Endpoints\\CatalogEndpoints' => __DIR__ . '/../..' . '/backend/src/Endpoints/CatalogEndpoints.php',
+        'App\\Backend\\Endpoints\\CheckoutEndpoints' => __DIR__ . '/../..' . '/backend/src/Endpoints/CheckoutEndpoints.php',
+        'App\\Backend\\Endpoints\\ReportEndpoints' => __DIR__ . '/../..' . '/backend/src/Endpoints/ReportEndpoints.php',
+        'App\\Backend\\Endpoints\\SellerEndpoints' => __DIR__ . '/../..' . '/backend/src/Endpoints/SellerEndpoints.php',
+        'App\\Backend\\Infrastructure\\Database\\PostgresConnection' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Database/PostgresConnection.php',
+        'App\\Backend\\Infrastructure\\Payment\\PaymentGatewayFactory' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Payment/PaymentGatewayFactory.php',
+        'App\\Backend\\Infrastructure\\Payment\\SimulatedPaymentGateway' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Payment/SimulatedPaymentGateway.php',
+        'App\\Backend\\Infrastructure\\Payment\\StripePaymentGateway' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Payment/StripePaymentGateway.php',
+        'App\\Backend\\Infrastructure\\Repositories\\PostgresCategoryRepository' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Repositories/PostgresCategoryRepository.php',
+        'App\\Backend\\Infrastructure\\Repositories\\PostgresOrderRepository' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Repositories/PostgresOrderRepository.php',
+        'App\\Backend\\Infrastructure\\Repositories\\PostgresProductRepository' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Repositories/PostgresProductRepository.php',
+        'App\\Backend\\Infrastructure\\Repositories\\PostgresReportRepository' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Repositories/PostgresReportRepository.php',
+        'App\\Backend\\Infrastructure\\Repositories\\PostgresUserRepository' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Repositories/PostgresUserRepository.php',
+        'App\\Backend\\Infrastructure\\Storage\\LocalStorageAdapter' => __DIR__ . '/../..' . '/backend/src/Infrastructure/Storage/LocalStorageAdapter.php',
+        'App\\Backend\\Views\\Engine\\ReportViewDispatcher' => __DIR__ . '/../..' . '/backend/src/Views/Engine/ReportViewDispatcher.php',
+        'App\\Backend\\Views\\Engine\\ViewRenderer' => __DIR__ . '/../..' . '/backend/src/Views/Engine/ViewRenderer.php',
+        'App\\Frontend\\Controllers\\AdminController' => __DIR__ . '/../..' . '/frontend/src/Controllers/AdminController.php',
+        'App\\Frontend\\Controllers\\AuthController' => __DIR__ . '/../..' . '/frontend/src/Controllers/AuthController.php',
+        'App\\Frontend\\Controllers\\CartController' => __DIR__ . '/../..' . '/frontend/src/Controllers/CartController.php',
+        'App\\Frontend\\Controllers\\CheckoutController' => __DIR__ . '/../..' . '/frontend/src/Controllers/CheckoutController.php',
+        'App\\Frontend\\Controllers\\SellerController' => __DIR__ . '/../..' . '/frontend/src/Controllers/SellerController.php',
+        'App\\Frontend\\Controllers\\StoreController' => __DIR__ . '/../..' . '/frontend/src/Controllers/StoreController.php',
+        'App\\Frontend\\Services\\BackendClient' => __DIR__ . '/../..' . '/frontend/src/Services/BackendClient.php',
+        'App\\Frontend\\Services\\CartSession' => __DIR__ . '/../..' . '/frontend/src/Services/CartSession.php',
+        'App\\Frontend\\Services\\Session' => __DIR__ . '/../..' . '/frontend/src/Services/Session.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

@@ -9,11 +9,11 @@ class BackendClient
     private string $baseUrl;
     private int $timeout;
 
-    public function __construct(?string $baseUrl = null, int $timeout = 10)
+    public function __construct(?string $baseUrl = null, ?int $timeout = null)
     {
         $config = require dirname(__DIR__, 2) . '/config/api.php';
         $this->baseUrl = rtrim($baseUrl ?: $config['base_url'], '/');
-        $this->timeout = $timeout;
+        $this->timeout = $timeout ?? (int)($config['timeout'] ?? 10);
     }
 
     public function get(string $endpoint, array $query = []): array

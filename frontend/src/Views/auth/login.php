@@ -16,13 +16,13 @@
             </div>
             <div class="grid grid-cols-3 gap-2">
                 <a href="/auth/quick/admin" class="py-2 px-1 text-center bg-white border border-amber-300 rounded-lg font-bold text-[11px] text-amber-900 hover:bg-amber-100 transition-colors shadow-xs">
-                    👑 Admin
+                    Admin
                 </a>
                 <a href="/auth/quick/seller" class="py-2 px-1 text-center bg-white border border-amber-300 rounded-lg font-bold text-[11px] text-amber-900 hover:bg-amber-100 transition-colors shadow-xs">
-                    🛍️ Vendedor
+                    Vendedor
                 </a>
                 <a href="/auth/quick/client" class="py-2 px-1 text-center bg-white border border-amber-300 rounded-lg font-bold text-[11px] text-amber-900 hover:bg-amber-100 transition-colors shadow-xs">
-                    👤 Cliente
+                    Cliente
                 </a>
             </div>
         </div>

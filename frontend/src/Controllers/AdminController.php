@@ -2,6 +2,7 @@
 
 namespace App\Frontend\Controllers;
 
+use App\Backend\Views\Engine\ReportViewDispatcher;
 use App\Frontend\Services\BackendClient;
 use App\Frontend\Services\Session;
 
@@ -137,16 +138,49 @@ class AdminController
 
     public function salesReport(): void
     {
-        (new \App\Backend\Views\Engine\ReportViewDispatcher())->sales();
+        $this->renderReport('sales', 'Reporte Ejecutivo de Ventas e Ingresos | AURA Atelier');
     }
 
     public function inventoryReport(): void
     {
-        (new \App\Backend\Views\Engine\ReportViewDispatcher())->inventory();
+        $this->renderReport('inventory', 'Reporte de Inventario y Stock Crítico | AURA Atelier');
     }
 
     public function sellersReport(): void
     {
-        (new \App\Backend\Views\Engine\ReportViewDispatcher())->sellers();
+        $this->renderReport('sellers', 'Reporte de Desempeño por Vendedor | AURA Atelier');
+    }
+
+    private function renderReport(string $method, string $title): void
+    {
+        $user = Session::getUser();
+        if (!$user || !Session::hasRole('ADMIN')) {
+            Session::flash('error', 'Acceso restringido para administradores.');
+            header('Location: /login');
+            exit;
+        }
+
+        $dispatcher = new ReportViewDispatcher();
+
+        // El CSV envía sus propias cabeceras y termina con exit().
+        if (($_GET['export'] ?? '') === 'csv') {
+            $dispatcher->$method();
+            return;
+        }
+
+        ob_start();
+        $dispatcher->$method();
+        $reportHtml = ob_get_clean();
+
+        // La impresión genera su propio documento HTML completo.
+        if (isset($_GET['print'])) {
+            echo $reportHtml;
+            return;
+        }
+
+        echo StoreController::render('admin/report_embed', [
+            'title' => $title,
+            'reportHtml' => $reportHtml,
+        ], 'admin');
     }
 }

@@ -10,11 +10,22 @@ if (php_sapi_name() === 'cli-server') {
     }
 }
 
-// Cargar autoloaders (frontend o root)
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require_once __DIR__ . '/../vendor/autoload.php';
-} else {
-    require_once __DIR__ . '/../../vendor/autoload.php';
+// Cargar autoloaders: frontend y raíz.
+// El autoload raíz registra App\Backend, necesario para renderizar los
+// reportes del backend desde el panel de administración del frontend.
+$frontendAutoload = __DIR__ . '/../vendor/autoload.php';
+$rootAutoload = __DIR__ . '/../../vendor/autoload.php';
+
+if (file_exists($frontendAutoload)) {
+    require_once $frontendAutoload;
+}
+
+if (file_exists($rootAutoload)) {
+    require_once $rootAutoload;
+}
+
+if (!file_exists($frontendAutoload) && !file_exists($rootAutoload)) {
+    throw new RuntimeException('No se encontró el autoload de Composer.');
 }
 
 use App\Frontend\Controllers\AdminController;

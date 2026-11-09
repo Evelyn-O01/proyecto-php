@@ -37,6 +37,7 @@ use App\Frontend\Controllers\StoreController;
 use App\Frontend\Services\Session;
 
 Session::start();
+Session::enforceActiveSession();
 
 // Router del Frontend
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);

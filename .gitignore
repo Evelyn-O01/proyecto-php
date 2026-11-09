@@ -4,6 +4,9 @@
 # Logs y temporales
 *.log
 
+# Registro de sesiones activas (bloqueo de una sesión por cuenta)
+frontend/storage/*.json
+
 # Entornos de editor / sistema
 .idea/
 .vscode/

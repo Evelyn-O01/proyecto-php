@@ -131,6 +131,17 @@ La carpeta `legacy/` contiene la **primera versión hexagonal** del proyecto (`s
 
 > La pantalla `/login` cuenta con botones de **Acceso Rápido con 1 Clic** para probar cualquiera de los 3 roles.
 
+### 2.1 Sesión única por cuenta
+
+El frontend aplica un bloqueo de **una sola sesión activa por cuenta**:
+
+- Si la cuenta ya está abierta en un navegador, un segundo navegador **no puede iniciar sesión** con esa misma cuenta; recibe el aviso *"Esta cuenta ya tiene una sesión activa en otro navegador"*.
+- Al cerrar sesión (`/logout`) la cuenta queda libre inmediatamente.
+- Si el navegador se cierra sin cerrar sesión, la reserva se libera automáticamente tras `SESSION_LOCK_TTL` segundos sin actividad (**30 minutos por defecto**).
+- El navegador activo renueva la reserva cada `SESSION_TOUCH_INTERVAL` segundos (**5 minutos por defecto**), por lo que una sesión en uso no expira.
+- El registro se guarda en `frontend/storage/active_sessions.json` (ignorado por Git). Usa `flock` para evitar que dos inicios de sesión simultáneos reclamen la cuenta a la vez.
+- En un despliegue con varios servidores frontend, ese archivo debe compartirse o sustituirse por un almacén central (Redis/PostgreSQL).
+
 ---
 
 ## 💳 3. Pasarela de Pago

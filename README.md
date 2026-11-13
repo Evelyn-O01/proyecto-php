@@ -36,12 +36,15 @@ proyecto_php/
 │       │   ├── AuthController.php
 │       │   ├── AdminController.php
 │       │   └── ReportController.php
-│       ├── Views/                    # 📄 Vistas del Backend (Motor de Reportes Diseñados & CSV)
+│       ├── Views/                    # 📄 Vistas del Backend (Motor de Reportes Diseñados & CSV/PDF)
 │       │   ├── Engine/ViewRenderer.php
+│       │   ├── Engine/PdfDocument.php     # Generador PDF en PHP puro (A4, tablas, paginación)
 │       │   ├── Engine/ReportViewDispatcher.php
 │       │   └── Reports/
 │       │       ├── sales_report.php      # Reporte con KPIs, barras, print CSS y PDF
+│       │       ├── SalesReportPdf.php    # Maquetación del PDF ejecutivo de ventas
 │       │       ├── inventory_report.php  # Reporte de stock crítico
+│       │       ├── InventoryReportPdf.php# Maquetación del PDF de inventario
 │       │       └── seller_report.php     # Rendimiento de vendedores
 │       ├── Domain/                   # 🧠 MODELO: Entidades, Puertos y Value Objects
 │       │   ├── Entities/             # Product, Order, Variant, Payment, User...
@@ -163,11 +166,12 @@ Ubicados en el Backend (`backend/src/Views/Reports/`), accesibles desde el panel
    - Tarjetas KPI: Ventas Netas Totales, Órdenes Liquidadas, Ticket Promedio y Unidades Físicas.
    - Participación porcentual por categoría y métodos de pago.
    - Top 10 prendas con mayor facturación y bitácora de transacciones.
-   - **Botón "Descargar CSV"** y **Botón "Imprimir / PDF A4"**.
+   - **Botón "Imprimir Reporte"** y **Botón "Descargar PDF"** (archivo PDF real generado en el servidor con `PdfDocument`, sin librerías externas).
 2. **Reporte de Inventario y Stock Crítico (`/reports/inventory`)**:
    - Umbral configurable de stock bajo (por defecto &le; 10 piezas).
    - Alerta visual destacada en rojo/ámbar para resurtido urgente.
    - Valuación monetaria en bodega a precio catálogo.
+   - **Botón "Imprimir Reporte"** y **Botón "Descargar PDF"** con el mismo motor de reportes.
 3. **Reporte de Desempeño por Vendedor (`/reports/sellers`)**:
    - Ventas brutas y volumen de órdenes por boutique o vendedor.
 

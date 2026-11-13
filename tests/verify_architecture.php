@@ -8,6 +8,8 @@ use App\Backend\Controllers\ProductController;
 use App\Backend\Controllers\ReportController;
 use App\Backend\Endpoints\ApiRouter;
 use App\Backend\Views\Engine\ViewRenderer;
+use App\Backend\Views\Reports\InventoryReportPdf;
+use App\Backend\Views\Reports\SalesReportPdf;
 use App\Frontend\Services\BackendClient;
 use App\Frontend\Services\CartSession;
 
@@ -39,7 +41,7 @@ echo "✔ Endpoint GET /api/v1/products -> Recibió lista con " . count($product
 $categoriesApi = $client->get('/api/v1/categories');
 echo "✔ Endpoint GET /api/v1/categories -> Recibió " . count($categoriesApi) . " categorías." . PHP_EOL;
 
-// 3. Validar Vistas del Backend (Motor de Reportes Diseñados & CSV)
+// 3. Validar Vistas del Backend (Motor de Reportes Diseñados, PDF & CSV)
 echo PHP_EOL . "--- [3] BACKEND: VISTAS Y MOTOR DE REPORTES DISEÑADOS ---" . PHP_EOL;
 $reportCtrl = new ReportController();
 $salesData = $reportCtrl->getSalesReport('2026-01-01', '2026-12-31');
@@ -51,11 +53,19 @@ $hasKpi = str_contains($renderedHtml, 'Ventas Netas Totales');
 $hasAura = str_contains($renderedHtml, 'AURA');
 echo "✔ ViewRenderer::render('Reports/sales_report') -> Renderizó HTML exitosamente (Contiene KPIs: " . ($hasKpi ? 'SÍ' : 'NO') . ")." . PHP_EOL;
 
+$pdfBytes = SalesReportPdf::render($salesData);
+$pdfValid = str_starts_with($pdfBytes, '%PDF-') && str_ends_with($pdfBytes, '%%EOF');
+echo "✔ SalesReportPdf::render() -> PDF de " . number_format(strlen($pdfBytes)) . " bytes generado (Estructura válida: " . ($pdfValid ? 'SÍ' : 'NO') . ")." . PHP_EOL;
+
 $inventoryData = $reportCtrl->getInventoryReport(null, 10);
 $inventoryData['title'] = 'Reporte de Inventario';
 $inventoryData['user'] = ['name' => 'Auditor General'];
 $renderedInv = ViewRenderer::render('Reports/inventory_report', $inventoryData);
 echo "✔ ViewRenderer::render('Reports/inventory_report') -> Valuación total: $" . number_format($inventoryData['summary']['total_inventory_value'], 2) . " MXN." . PHP_EOL;
+
+$inventoryPdfBytes = InventoryReportPdf::render($inventoryData);
+$inventoryPdfValid = str_starts_with($inventoryPdfBytes, '%PDF-') && str_ends_with($inventoryPdfBytes, '%%EOF');
+echo "✔ InventoryReportPdf::render() -> PDF de " . number_format(strlen($inventoryPdfBytes)) . " bytes generado (Estructura válida: " . ($inventoryPdfValid ? 'SÍ' : 'NO') . ")." . PHP_EOL;
 
 // 4. Validar Frontend Web App
 echo PHP_EOL . "--- [4] FRONTEND: SERVICIOS Y FLUJO DE COMPRA ---" . PHP_EOL;

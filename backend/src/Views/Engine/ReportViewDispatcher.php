@@ -3,6 +3,8 @@
 namespace App\Backend\Views\Engine;
 
 use App\Backend\Controllers\ReportController;
+use App\Backend\Views\Reports\InventoryReportPdf;
+use App\Backend\Views\Reports\SalesReportPdf;
 
 class ReportViewDispatcher
 {
@@ -38,6 +40,19 @@ class ReportViewDispatcher
             ViewRenderer::exportCsv($headers, $rows, 'reporte_ventas_aura_' . date('Ymd_His') . '.csv');
         }
 
+        if (($_GET['export'] ?? '') === 'pdf') {
+            $pdf = SalesReportPdf::render($data);
+            $filename = 'reporte_ventas_aura_' . date('Ymd_His') . '.pdf';
+
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Length: ' . strlen($pdf));
+            header('Cache-Control: private, max-age=0, must-revalidate');
+            header('Pragma: public');
+            echo $pdf;
+            exit;
+        }
+
         header('Content-Type: text/html; charset=utf-8');
         echo ViewRenderer::render('Reports/sales_report', $data);
     }
@@ -67,6 +82,19 @@ class ReportViewDispatcher
                 ];
             }
             ViewRenderer::exportCsv($headers, $rows, 'reporte_inventario_aura_' . date('Ymd_His') . '.csv');
+        }
+
+        if (($_GET['export'] ?? '') === 'pdf') {
+            $pdf = InventoryReportPdf::render($data);
+            $filename = 'reporte_inventario_aura_' . date('Ymd_His') . '.pdf';
+
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Length: ' . strlen($pdf));
+            header('Cache-Control: private, max-age=0, must-revalidate');
+            header('Pragma: public');
+            echo $pdf;
+            exit;
         }
 
         header('Content-Type: text/html; charset=utf-8');

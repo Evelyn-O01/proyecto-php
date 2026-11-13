@@ -162,8 +162,8 @@ class AdminController
 
         $dispatcher = new ReportViewDispatcher();
 
-        // El CSV envía sus propias cabeceras y termina con exit().
-        if (($_GET['export'] ?? '') === 'csv') {
+        // CSV y PDF envían sus propias cabeceras y terminan con exit().
+        if (in_array($_GET['export'] ?? '', ['csv', 'pdf'], true)) {
             $dispatcher->$method();
             return;
         }
